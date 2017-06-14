@@ -38,7 +38,6 @@ export class MdOptionSelectionChange {
  * Single option inside of a `<md-select>` element.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-option, mat-option',
   host: {
     'role': 'option',
@@ -54,7 +53,7 @@ export class MdOptionSelectionChange {
     '(keydown)': '_handleKeydown($event)',
     'class': 'mat-option',
   },
-  templateUrl: 'option.html',
+  templateUrl: './option.html',
   encapsulation: ViewEncapsulation.None
 })
 export class MdOption {

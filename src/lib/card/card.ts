@@ -143,10 +143,9 @@ export class MdCardAvatar {}
  * - md-card-footer
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-card, mat-card',
-  templateUrl: 'card.html',
-  styleUrls: ['card.css'],
+  templateUrl: './card.html',
+  styleUrls: ['./card.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {'class': 'mat-card'}
@@ -160,9 +159,8 @@ export class MdCard {}
  * @docs-private
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-card-header, mat-card-header',
-  templateUrl: 'card-header.html',
+  templateUrl: './card-header.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {'class': 'mat-card-header'}
@@ -176,9 +174,8 @@ export class MdCardHeader {}
  * @docs-private
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-card-title-group, mat-card-title-group',
-  templateUrl: 'card-title-group.html',
+  templateUrl: './card-title-group.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {'class': 'mat-card-title-group'}

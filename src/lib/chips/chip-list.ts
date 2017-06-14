@@ -34,7 +34,6 @@ import {Subscription} from 'rxjs/Subscription';
  *     </md-chip-list>
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-chip-list, mat-chip-list',
   template: `<div class="mat-chip-list-wrapper"><ng-content></ng-content></div>`,
   host: {
@@ -50,7 +49,7 @@ import {Subscription} from 'rxjs/Subscription';
   queries: {
     chips: new ContentChildren(MdChip)
   },
-  styleUrls: ['chips.css'],
+  styleUrls: ['./chips.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

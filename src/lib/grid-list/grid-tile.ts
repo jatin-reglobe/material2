@@ -20,14 +20,13 @@ import {MdLine, MdLineSetter} from '../core';
 import {coerceToNumber} from './grid-list-measure';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-grid-tile, mat-grid-tile',
   host: {
     'role': 'listitem',
     'class': 'mat-grid-tile',
   },
-  templateUrl: 'grid-tile.html',
-  styleUrls: ['grid-list.css'],
+  templateUrl: './grid-tile.html',
+  styleUrls: ['./grid-list.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class MdGridTile {
@@ -56,9 +55,8 @@ export class MdGridTile {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'md-grid-tile-header, mat-grid-tile-header, md-grid-tile-footer, mat-grid-tile-footer',
-  templateUrl: 'grid-tile-text.html'
+  templateUrl: './grid-tile-text.html'
 })
 export class MdGridTileText implements AfterContentInit {
   /**

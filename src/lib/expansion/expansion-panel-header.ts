@@ -31,10 +31,9 @@ import {MdExpansionPanel, EXPANSION_PANEL_ANIMATION_TIMING} from './expansion-pa
  * Please refer to README.md for examples on how to use it.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-expansion-panel-header, mat-expansion-panel-header',
-  styleUrls: ['./expansion-panel-header.css'],
   templateUrl: './expansion-panel-header.html',
+  styleUrls: ['./expansion-panel-header.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'mat-expansion-panel-header',

@@ -51,10 +51,9 @@ let datepickerUid = 0;
  * @docs-private
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-datepicker-content',
-  templateUrl: 'datepicker-content.html',
-  styleUrls: ['datepicker-content.css'],
+  templateUrl: './datepicker-content.html',
+  styleUrls: ['./datepicker-content.scss'],
   host: {
     'class': 'mat-datepicker-content',
     '[class.mat-datepicker-content-touch]': 'datepicker?.touchUi',
@@ -96,7 +95,6 @@ export class MdDatepickerContent<D> implements AfterContentInit {
 // angular adds support for `exportAs: '$implicit'` on directives.
 /** Component responsible for managing the datepicker popup/dialog. */
 @Component({
-  moduleId: module.id,
   selector: 'md-datepicker, mat-datepicker',
   template: '',
 })

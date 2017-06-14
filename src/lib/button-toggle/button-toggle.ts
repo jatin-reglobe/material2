@@ -280,10 +280,9 @@ export class MdButtonToggleGroupMultiple {
 
 /** Single button inside of a toggle group. */
 @Component({
-  moduleId: module.id,
   selector: 'md-button-toggle, mat-button-toggle',
-  templateUrl: 'button-toggle.html',
-  styleUrls: ['button-toggle.css'],
+  templateUrl: './button-toggle.html',
+  styleUrls: ['./button-toggle.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'mat-button-toggle'

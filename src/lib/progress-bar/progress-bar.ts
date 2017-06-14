@@ -21,7 +21,6 @@ import {
  * <md-progress-bar> component.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-progress-bar, mat-progress-bar',
   host: {
     'role': 'progressbar',
@@ -32,8 +31,8 @@ import {
     '[class.mat-warn]': 'color == "warn"',
     'class': 'mat-progress-bar',
   },
-  templateUrl: 'progress-bar.html',
-  styleUrls: ['progress-bar.css'],
+  templateUrl: './progress-bar.html',
+  styleUrls: ['./progress-bar.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MdProgressBar {

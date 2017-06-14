@@ -42,10 +42,9 @@ export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,
  * Please refer to README.md for examples on how to use it.
  */
 @Component({
-  moduleId: module.id,
-  styleUrls: ['./expansion-panel.css'],
   selector: 'md-expansion-panel, mat-expansion-panel',
   templateUrl: './expansion-panel.html',
+  styleUrls: ['./expansion-panel.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'mat-expansion-panel',

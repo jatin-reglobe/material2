@@ -81,10 +81,9 @@ export const _MdCheckboxMixinBase = mixinColor(mixinDisabled(MdCheckboxBase), 'a
  * See: https://www.google.com/design/spec/components/selection-controls.html
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-checkbox, mat-checkbox',
-  templateUrl: 'checkbox.html',
-  styleUrls: ['checkbox.css'],
+  templateUrl: './checkbox.html',
+  styleUrls: ['./checkbox.scss'],
   host: {
     'class': 'mat-checkbox',
     '[class.mat-checkbox-indeterminate]': 'indeterminate',

@@ -61,7 +61,6 @@ export const _MdSlideToggleMixinBase = mixinColor(mixinDisabled(MdSlideToggleBas
 
 /** Represents a slidable "switch" toggle that can be moved between on and off. */
 @Component({
-  moduleId: module.id,
   selector: 'md-slide-toggle, mat-slide-toggle',
   host: {
     'class': 'mat-slide-toggle',
@@ -69,8 +68,8 @@ export const _MdSlideToggleMixinBase = mixinColor(mixinDisabled(MdSlideToggleBas
     '[class.mat-disabled]': 'disabled',
     '[class.mat-slide-toggle-label-before]': 'labelPosition == "before"',
   },
-  templateUrl: 'slide-toggle.html',
-  styleUrls: ['slide-toggle.css'],
+  templateUrl: './slide-toggle.html',
+  styleUrls: ['./slide-toggle.scss'],
   providers: [MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
   inputs: ['disabled', 'color'],
   encapsulation: ViewEncapsulation.None,

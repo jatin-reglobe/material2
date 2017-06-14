@@ -308,10 +308,9 @@ export const _MdRadioButtonMixinBase = mixinColor(MdRadioButtonBase, 'accent');
  * A radio-button. May be inside of
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-radio-button, mat-radio-button',
-  templateUrl: 'radio.html',
-  styleUrls: ['radio.css'],
+  templateUrl: './radio.html',
+  styleUrls: ['./radio.scss'],
   inputs: ['color'],
   encapsulation: ViewEncapsulation.None,
   host: {

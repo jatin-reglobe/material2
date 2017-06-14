@@ -63,10 +63,9 @@ export const _MdIconMixinBase = mixinColor(MdIconBase);
  *     <md-icon fontSet="fa" fontIcon="alarm"></md-icon>
  */
 @Component({
-  moduleId: module.id,
   template: '<ng-content></ng-content>',
   selector: 'md-icon, mat-icon',
-  styleUrls: ['icon.css'],
+  styleUrls: ['./icon.scss'],
   inputs: ['color'],
   host: {
     'role': 'img',

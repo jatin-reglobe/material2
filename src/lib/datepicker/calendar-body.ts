@@ -33,10 +33,9 @@ export class MdCalendarCell {
  * @docs-private
  */
 @Component({
-  moduleId: module.id,
   selector: '[md-calendar-body]',
-  templateUrl: 'calendar-body.html',
-  styleUrls: ['calendar-body.css'],
+  templateUrl: './calendar-body.html',
+  styleUrls: ['./calendar-body.scss'],
   host: {
     'class': 'mat-calendar-body',
   },

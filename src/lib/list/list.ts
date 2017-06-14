@@ -31,11 +31,10 @@ import {coerceBooleanProperty, MdLine, MdLineSetter} from '../core';
 export class MdListDivider {}
 
 @Component({
-  moduleId: module.id,
   selector: 'md-list, mat-list, md-nav-list, mat-nav-list',
   host: {'role': 'list'},
   template: '<ng-content></ng-content>',
-  styleUrls: ['list.css'],
+  styleUrls: ['./list.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class MdList {
@@ -111,7 +110,6 @@ export class MdListIconCssMatStyler {}
 export class MdListSubheaderCssMatStyler {}
 
 @Component({
-  moduleId: module.id,
   selector: 'md-list-item, mat-list-item, a[md-list-item], a[mat-list-item]',
   host: {
     'role': 'listitem',
@@ -119,7 +117,7 @@ export class MdListSubheaderCssMatStyler {}
     '(focus)': '_handleFocus()',
     '(blur)': '_handleBlur()',
   },
-  templateUrl: 'list-item.html',
+  templateUrl: './list-item.html',
   encapsulation: ViewEncapsulation.None
 })
 export class MdListItem implements AfterContentInit {

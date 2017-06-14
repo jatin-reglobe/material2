@@ -42,10 +42,9 @@ import {MATERIAL_COMPATIBILITY_MODE} from '../core';
  * @docs-private
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-calendar',
-  templateUrl: 'calendar.html',
-  styleUrls: ['calendar.css'],
+  templateUrl: './calendar.html',
+  styleUrls: ['./calendar.scss'],
   host: {
     'class': 'mat-calendar',
   },

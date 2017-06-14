@@ -66,7 +66,6 @@ export const _MdProgressSpinnerMixinBase = mixinColor(MdProgressSpinnerBase, 'pr
  * <md-progress-spinner> component.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-progress-spinner, mat-progress-spinner',
   host: {
     'role': 'progressbar',
@@ -74,8 +73,8 @@ export const _MdProgressSpinnerMixinBase = mixinColor(MdProgressSpinnerBase, 'pr
     '[attr.aria-valuemax]': '_ariaValueMax'
   },
   inputs: ['color'],
-  templateUrl: 'progress-spinner.html',
-  styleUrls: ['progress-spinner.css'],
+  templateUrl: './progress-spinner.html',
+  styleUrls: ['./progress-spinner.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MdProgressSpinner extends _MdProgressSpinnerMixinBase
@@ -271,7 +270,6 @@ export class MdProgressSpinner extends _MdProgressSpinnerMixinBase
  * indeterminate <md-progress-spinner> instance.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-spinner, mat-spinner',
   host: {
     'role': 'progressbar',
@@ -279,8 +277,8 @@ export class MdProgressSpinner extends _MdProgressSpinnerMixinBase
     'class': 'mat-spinner',
   },
   inputs: ['color'],
-  templateUrl: 'progress-spinner.html',
-  styleUrls: ['progress-spinner.css'],
+  templateUrl: './progress-spinner.html',
+  styleUrls: ['./progress-spinner.scss'],
 })
 export class MdSpinner extends MdProgressSpinner implements OnDestroy {
 

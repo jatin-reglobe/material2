@@ -30,10 +30,9 @@ let _uniqueAutocompleteIdCounter = 0;
 export type AutocompletePositionY = 'above' | 'below';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-autocomplete, mat-autocomplete',
-  templateUrl: 'autocomplete.html',
-  styleUrls: ['autocomplete.css'],
+  templateUrl: './autocomplete.html',
+  styleUrls: ['./autocomplete.scss'],
   encapsulation: ViewEncapsulation.None,
   exportAs: 'mdAutocomplete',
   host: {

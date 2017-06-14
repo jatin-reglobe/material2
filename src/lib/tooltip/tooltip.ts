@@ -331,10 +331,9 @@ export type TooltipVisibility = 'initial' | 'visible' | 'hidden';
  * @docs-private
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-tooltip-component, mat-tooltip-component',
-  templateUrl: 'tooltip.html',
-  styleUrls: ['tooltip.css'],
+  templateUrl: './tooltip.html',
+  styleUrls: ['./tooltip.scss'],
   animations: [
     trigger('state', [
       state('void', style({transform: 'scale(0)'})),

@@ -41,10 +41,9 @@ export type MdTabHeaderPosition = 'above' | 'below';
  * See: https://www.google.com/design/spec/components/tabs.html
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-tab-group, mat-tab-group',
-  templateUrl: 'tab-group.html',
-  styleUrls: ['tab-group.css'],
+  templateUrl: './tab-group.html',
+  styleUrls: ['./tab-group.scss'],
   host: {
     'class': 'mat-tab-group',
     '[class.mat-tab-group-dynamic-height]': 'dynamicHeight',

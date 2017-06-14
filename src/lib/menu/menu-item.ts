@@ -15,7 +15,6 @@ import {coerceBooleanProperty} from '../core/coercion/boolean-property';
  * It exists mostly to set the role attribute.
  */
 @Component({
-  moduleId: module.id,
   selector: '[md-menu-item], [mat-menu-item]',
   host: {
     'role': 'menuitem',
@@ -25,7 +24,7 @@ import {coerceBooleanProperty} from '../core/coercion/boolean-property';
     '[attr.disabled]': '_getDisabledAttr()',
     '(click)': '_checkDisabled($event)',
   },
-  templateUrl: 'menu-item.html',
+  templateUrl: './menu-item.html',
   exportAs: 'mdMenuItem'
 })
 export class MdMenuItem implements Focusable {

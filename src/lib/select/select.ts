@@ -117,10 +117,9 @@ export class MdSelectBase {
 export const _MdSelectMixinBase = mixinColor(MdSelectBase, 'primary');
 
 @Component({
-  moduleId: module.id,
   selector: 'md-select, mat-select',
-  templateUrl: 'select.html',
-  styleUrls: ['select.css'],
+  templateUrl: './select.html',
+  styleUrls: ['./select.scss'],
   inputs: ['color'],
   encapsulation: ViewEncapsulation.None,
   host: {

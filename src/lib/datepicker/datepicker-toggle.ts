@@ -12,10 +12,9 @@ import {MdDatepickerIntl} from './datepicker-intl';
 
 
 @Component({
-  moduleId: module.id,
   selector: 'button[mdDatepickerToggle], button[matDatepickerToggle]',
   template: '',
-  styleUrls: ['datepicker-toggle.css'],
+  styleUrls: ['./datepicker-toggle.scss'],
   host: {
     'type': 'button',
     'class': 'mat-datepicker-toggle',

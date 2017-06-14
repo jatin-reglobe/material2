@@ -290,10 +290,9 @@ export class MdInputDirective {
  * Container for text inputs that applies Material Design styling and behavior.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-input-container, mat-input-container',
-  templateUrl: 'input-container.html',
-  styleUrls: ['input-container.css'],
+  templateUrl: './input-container.html',
+  styleUrls: ['./input-container.scss'],
   animations: [
     trigger('transitionMessages', [
       state('enter', style({ opacity: 1, transform: 'translateY(0%)' })),
