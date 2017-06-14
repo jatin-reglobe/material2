@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true,
+    "rootDir": ".",
+    "outDir": "./dist/out-tsc",
+    "typeRoots": [
+      "node_modules/@types/!(node)",
+      "node_modules/zone.js/dist/zone.js.d.ts"
+    ]
+  },
+  "files": [
+    "node_modules/zone.js/dist/zone.js.d.ts"
+  ],
+  "include": [
+    "src/**/*",
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "e2e",
+    "test",
+    "tools",
+    "**/*.spec.ts",
+    "src/test.ts",
+    "src/environments",
+    "src/polyfills.ts",
+    "src/main.ts",
+    "src/demo-app",
+    "src/e2e-app",
+    "src/material-examples",
+    "src/universal-app",
+    "src/cdk",
+    "src/lib/core/testing"
+  ],
+  "angularCompilerOptions": {
+    "genDir": ".ngFactory",
+    "skipMetadataEmit": true
+  }
+}

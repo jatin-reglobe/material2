@@ -8,6 +8,7 @@
     "url": "https://github.com/angular/material2.git"
   },
   "scripts": {
+    "build:tsc": "tsc -p tsconfig-aot.json",
     "build": "gulp material:build-release:clean",
     "demo-app": "gulp serve:devapp",
     "test": "gulp test",
