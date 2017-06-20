@@ -1,14 +1,19 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MdDatepickerModule} from './index';
 import {Component, ViewChild} from '@angular/core';
-import {MdDatepicker} from './datepicker';
-import {MdDatepickerInput} from './datepicker-input';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {By} from '@angular/platform-browser';
-import {dispatchFakeEvent, dispatchMouseEvent} from '../core/testing/dispatch-events';
+import {MdDatepickerModule} from './index';
+import {MdDatepicker} from './datepicker';
+import {MdDatepickerInput} from './datepicker-input';
 import {MdInputModule} from '../input/index';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MdNativeDateModule, DateAdapter, NativeDateAdapter} from '../core/datetime/index';
+import {ESCAPE} from '../core';
+import {
+  dispatchFakeEvent,
+  dispatchMouseEvent,
+  dispatchKeyboardEvent,
+} from '../core/testing/dispatch-events';
 
 
 // When constructing a Date, the month is zero-based. This can be confusing, since people are
@@ -34,7 +39,7 @@ describe('MdDatepicker', () => {
             let adapter = new NativeDateAdapter();
             adapter.setLocale('en-US');
             return adapter;
-          }}
+          }},
         ],
         declarations: [
           DatepickerWithFilterAndValidation,
@@ -42,6 +47,7 @@ describe('MdDatepicker', () => {
           DatepickerWithMinAndMaxValidation,
           DatepickerWithNgModel,
           DatepickerWithStartAt,
+          DatepickerWithStartView,
           DatepickerWithToggle,
           InputContainerDatepicker,
           MultiInputDatepicker,
@@ -105,6 +111,23 @@ describe('MdDatepicker', () => {
           expect(parseInt(getComputedStyle(popup).height)).toBe(0);
         });
       }));
+
+      it('should close the popup when pressing ESCAPE', () => {
+        testComponent.datepicker.open();
+        fixture.detectChanges();
+
+        let content = document.querySelector('.cdk-overlay-pane md-datepicker-content');
+        expect(content).toBeTruthy('Expected datepicker to be open.');
+
+        let keyboadEvent = dispatchKeyboardEvent(content, 'keydown', ESCAPE);
+        fixture.detectChanges();
+
+        content = document.querySelector('.cdk-overlay-pane md-datepicker-content');
+
+        expect(content).toBeFalsy('Expected datepicker to be closed.');
+        expect(keyboadEvent.defaultPrevented)
+            .toBe(true, 'Expected default ESCAPE action to be prevented.');
+      });
 
       it('close should close dialog', async(() => {
         testComponent.touch = true;
@@ -200,6 +223,35 @@ describe('MdDatepicker', () => {
 
       it('explicit startAt should override input value', () => {
         expect(testComponent.datepicker.startAt).toEqual(new Date(2010, JAN, 1));
+      });
+    });
+
+    describe('datepicker with startView', () => {
+      let fixture: ComponentFixture<DatepickerWithStartView>;
+      let testComponent: DatepickerWithStartView;
+
+      beforeEach(async(() => {
+        fixture = TestBed.createComponent(DatepickerWithStartView);
+        fixture.detectChanges();
+
+        testComponent = fixture.componentInstance;
+      }));
+
+      afterEach(async(() => {
+        testComponent.datepicker.close();
+        fixture.detectChanges();
+      }));
+
+      it('should start at the specified view', () => {
+        testComponent.datepicker.open();
+        fixture.detectChanges();
+
+        const firstCalendarCell = document.querySelector('.mat-calendar-body-cell');
+
+        // When the calendar is in year view, the first cell should be for a month rather than
+        // for a date.
+        expect(firstCalendarCell.textContent)
+            .toBe('JAN', 'Expected the calendar to be in year-view');
       });
     });
 
@@ -394,6 +446,30 @@ describe('MdDatepicker', () => {
       it('should set the `button` type on the trigger to prevent form submissions', () => {
         let toggle = fixture.debugElement.query(By.css('button')).nativeElement;
         expect(toggle.getAttribute('type')).toBe('button');
+      });
+
+      it('should restore focus to the toggle after the calendar is closed', () => {
+        let toggle = fixture.debugElement.query(By.css('button')).nativeElement;
+
+        fixture.componentInstance.touchUI = false;
+        fixture.detectChanges();
+
+        toggle.focus();
+        expect(document.activeElement).toBe(toggle, 'Expected toggle to be focused.');
+
+        fixture.componentInstance.datepicker.open();
+        fixture.detectChanges();
+
+        let pane = document.querySelector('.cdk-overlay-pane');
+
+        expect(pane).toBeTruthy('Expected calendar to be open.');
+        expect(pane.contains(document.activeElement))
+            .toBe(true, 'Expected focus to be inside the calendar.');
+
+        fixture.componentInstance.datepicker.close();
+        fixture.detectChanges();
+
+        expect(document.activeElement).toBe(toggle, 'Expected focus to be restored to toggle.');
       });
     });
 
@@ -699,6 +775,18 @@ class DatepickerWithStartAt {
 
 
 @Component({
+  template: `
+    <input [mdDatepicker]="d" [value]="date">
+    <md-datepicker #d startView="year"></md-datepicker>
+  `,
+})
+class DatepickerWithStartView {
+  date = new Date(2020, JAN, 1);
+  @ViewChild('d') datepicker: MdDatepicker<Date>;
+}
+
+
+@Component({
   template: `<input [(ngModel)]="selected" [mdDatepicker]="d"><md-datepicker #d></md-datepicker>`,
 })
 class DatepickerWithNgModel {
@@ -725,11 +813,12 @@ class DatepickerWithFormControl {
   template: `
     <input [mdDatepicker]="d">
     <button [mdDatepickerToggle]="d"></button>
-    <md-datepicker #d [touchUi]="true"></md-datepicker>
+    <md-datepicker #d [touchUi]="touchUI"></md-datepicker>
   `,
 })
 class DatepickerWithToggle {
   @ViewChild('d') datepicker: MdDatepicker<Date>;
+  touchUI = true;
 }
 
 

@@ -28,7 +28,7 @@ import {ConnectedPositionStrategy} from '../core/overlay/position/connected-posi
 import {Observable} from 'rxjs/Observable';
 import {MdOptionSelectionChange, MdOption} from '../core/option/option';
 import {ENTER, UP_ARROW, DOWN_ARROW, ESCAPE} from '../core/keyboard/keycodes';
-import {Dir} from '../core/rtl/dir';
+import {Directionality} from '../core/bidi/index';
 import {MdInputContainer} from '../input/input-container';
 import {Subscription} from 'rxjs/Subscription';
 import 'rxjs/add/observable/merge';
@@ -62,7 +62,7 @@ export const MD_AUTOCOMPLETE_VALUE_ACCESSOR: any = {
  * Creates an error to be thrown when attempting to use an autocomplete trigger without a panel.
  */
 export function getMdAutocompleteMissingPanelError(): Error {
-  return new Error('Attempting to open an undefined instance of `md-autocomplete`. ' +
+  return Error('Attempting to open an undefined instance of `md-autocomplete`. ' +
                    'Make sure that the id passed to the `mdAutocomplete` is correct and that ' +
                    'you\'re attempting to open it after the ngAfterContentInit hook.');
 }
@@ -120,8 +120,9 @@ export class MdAutocompleteTrigger implements ControlValueAccessor, OnDestroy {
 
   constructor(private _element: ElementRef, private _overlay: Overlay,
               private _viewContainerRef: ViewContainerRef,
+              private _zone: NgZone,
               private _changeDetectorRef: ChangeDetectorRef,
-              @Optional() private _dir: Dir, private _zone: NgZone,
+              @Optional() private _dir: Directionality,
               @Optional() @Host() private _inputContainer: MdInputContainer,
               @Optional() @Inject(DOCUMENT) private _document: any) {}
 

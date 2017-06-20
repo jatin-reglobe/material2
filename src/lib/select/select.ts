@@ -29,7 +29,7 @@ import {
 import {MdOption, MdOptionSelectionChange, MdOptgroup} from '../core/option/index';
 import {ENTER, SPACE, UP_ARROW, DOWN_ARROW, HOME, END} from '../core/keyboard/keycodes';
 import {FocusKeyManager} from '../core/a11y/focus-key-manager';
-import {Dir} from '../core/rtl/dir';
+import {Directionality} from '../core/bidi/index';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {transformPlaceholder, transformPanel, fadeInContent} from './select-animations';
@@ -38,13 +38,12 @@ import {coerceBooleanProperty} from '../core/coercion/boolean-property';
 import {ConnectedOverlayDirective} from '../core/overlay/overlay-directives';
 import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 import {SelectionModel} from '../core/selection/selection';
-import {ScrollDispatcher} from '../core/overlay/scroll/scroll-dispatcher';
 import {getMdSelectDynamicMultipleError, getMdSelectNonArrayValueError} from './select-errors';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/filter';
 import {CanColor, mixinColor} from '../core/common-behaviors/color';
-import {CanDisable} from '../core/common-behaviors/disabled';
+import {CanDisable, mixinDisabled} from '../core/common-behaviors/disabled';
 import {
   FloatPlaceholderType,
   PlaceholderOptions,
@@ -114,13 +113,13 @@ export class MdSelectChange {
 export class MdSelectBase {
   constructor(public _renderer: Renderer2, public _elementRef: ElementRef) {}
 }
-export const _MdSelectMixinBase = mixinColor(MdSelectBase, 'primary');
+export const _MdSelectMixinBase = mixinColor(mixinDisabled(MdSelectBase), 'primary');
 
 @Component({
   selector: 'md-select, mat-select',
   templateUrl: './select.html',
   styleUrls: ['./select.scss'],
-  inputs: ['color'],
+  inputs: ['color', 'disabled'],
   encapsulation: ViewEncapsulation.None,
   host: {
     'role': 'listbox',
@@ -144,7 +143,7 @@ export const _MdSelectMixinBase = mixinColor(MdSelectBase, 'primary');
   exportAs: 'mdSelect',
 })
 export class MdSelect extends _MdSelectMixinBase implements AfterContentInit, OnDestroy, OnInit,
-    ControlValueAccessor, CanColor {
+    ControlValueAccessor, CanColor, CanDisable {
   /** Whether or not the overlay panel is open. */
   private _panelOpen = false;
 
@@ -159,9 +158,6 @@ export class MdSelect extends _MdSelectMixinBase implements AfterContentInit, On
 
   /** Whether filling out the select is required in the form.  */
   private _required: boolean = false;
-
-  /** Whether the select is disabled.  */
-  private _disabled: boolean = false;
 
   /** The scroll position of the overlay panel, calculated to center the selected option. */
   private _scrollTop = 0;
@@ -267,13 +263,6 @@ export class MdSelect extends _MdSelectMixinBase implements AfterContentInit, On
     Promise.resolve(null).then(() => this._setTriggerWidth());
   }
 
-  /** Whether the component is disabled. */
-  @Input()
-  get disabled() { return this._disabled; }
-  set disabled(value: any) {
-    this._disabled = coerceBooleanProperty(value);
-  }
-
   /** Whether the component is required. */
   @Input()
   get required() { return this._required; }
@@ -300,7 +289,7 @@ export class MdSelect extends _MdSelectMixinBase implements AfterContentInit, On
 
   /** Tab index for the select element. */
   @Input()
-  get tabIndex(): number { return this._disabled ? -1 : this._tabIndex; }
+  get tabIndex(): number { return this.disabled ? -1 : this._tabIndex; }
   set tabIndex(value: number) {
     if (typeof value !== 'undefined') {
       this._tabIndex = value;
@@ -332,7 +321,7 @@ export class MdSelect extends _MdSelectMixinBase implements AfterContentInit, On
     private _changeDetectorRef: ChangeDetectorRef,
     renderer: Renderer2,
     elementRef: ElementRef,
-    @Optional() private _dir: Dir,
+    @Optional() private _dir: Directionality,
     @Self() @Optional() public _control: NgControl,
     @Attribute('tabindex') tabIndex: string,
     @Optional() @Inject(MD_PLACEHOLDER_GLOBAL_OPTIONS) placeholderOptions: PlaceholderOptions) {

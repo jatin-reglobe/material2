@@ -20,12 +20,14 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
   NgZone,
+  Inject,
 } from '@angular/core';
+import {DOCUMENT} from '@angular/platform-browser';
 import {Overlay} from '../core/overlay/overlay';
 import {OverlayRef} from '../core/overlay/overlay-ref';
 import {ComponentPortal} from '../core/portal/portal';
 import {OverlayState} from '../core/overlay/overlay-state';
-import {Dir} from '../core/rtl/dir';
+import {Directionality} from '../core/bidi/index';
 import {MdDialog} from '../dialog/dialog';
 import {MdDialogRef} from '../dialog/dialog-ref';
 import {PositionStrategy} from '../core/overlay/position/position-strategy';
@@ -56,7 +58,7 @@ let datepickerUid = 0;
   styleUrls: ['./datepicker-content.scss'],
   host: {
     'class': 'mat-datepicker-content',
-    '[class.mat-datepicker-content-touch]': 'datepicker?.touchUi',
+    '[class.mat-datepicker-content-touch]': 'datepicker.touchUi',
     '(keydown)': '_handleKeydown($event)',
   },
   encapsulation: ViewEncapsulation.None,
@@ -76,16 +78,10 @@ export class MdDatepickerContent<D> implements AfterContentInit {
    * @param event The event.
    */
   _handleKeydown(event: KeyboardEvent): void {
-    switch (event.keyCode) {
-      case ESCAPE:
-        this.datepicker.close();
-        break;
-      default:
-        // Return so that we don't preventDefault on keys that are not explicitly handled.
-        return;
+    if (event.keyCode === ESCAPE) {
+      this.datepicker.close();
+      event.preventDefault();
     }
-
-    event.preventDefault();
   }
 }
 
@@ -156,6 +152,9 @@ export class MdDatepicker<D> implements OnDestroy {
   /** The input element this datepicker is associated with. */
   private _datepickerInput: MdDatepickerInput<D>;
 
+  /** The element that was focused before the datepicker was opened. */
+  private _focusedElementBeforeOpen: HTMLElement;
+
   private _inputSubscription: Subscription;
 
   constructor(private _dialog: MdDialog,
@@ -163,11 +162,11 @@ export class MdDatepicker<D> implements OnDestroy {
               private _ngZone: NgZone,
               private _viewContainerRef: ViewContainerRef,
               @Optional() private _dateAdapter: DateAdapter<D>,
-              @Optional() private _dir: Dir) {
+              @Optional() private _dir: Directionality,
+              @Optional() @Inject(DOCUMENT) private _document: any) {
     if (!this._dateAdapter) {
       throw createMissingDateImplError('DateAdapter');
     }
-
   }
 
   ngOnDestroy() {
@@ -196,7 +195,7 @@ export class MdDatepicker<D> implements OnDestroy {
    */
   _registerInput(input: MdDatepickerInput<D>): void {
     if (this._datepickerInput) {
-      throw new Error('An MdDatepicker can only be associated with a single input.');
+      throw Error('An MdDatepicker can only be associated with a single input.');
     }
     this._datepickerInput = input;
     this._inputSubscription =
@@ -209,7 +208,10 @@ export class MdDatepicker<D> implements OnDestroy {
       return;
     }
     if (!this._datepickerInput) {
-      throw new Error('Attempted to open an MdDatepicker with no associated input.');
+      throw Error('Attempted to open an MdDatepicker with no associated input.');
+    }
+    if (this._document) {
+      this._focusedElementBeforeOpen = this._document.activeElement;
     }
 
     this.touchUi ? this._openAsDialog() : this._openAsPopup();
@@ -231,6 +233,11 @@ export class MdDatepicker<D> implements OnDestroy {
     if (this._calendarPortal && this._calendarPortal.isAttached) {
       this._calendarPortal.detach();
     }
+    if (this._focusedElementBeforeOpen && 'focus' in this._focusedElementBeforeOpen) {
+      this._focusedElementBeforeOpen.focus();
+      this._focusedElementBeforeOpen = null;
+    }
+
     this.opened = false;
   }
 

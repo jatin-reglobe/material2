@@ -37,7 +37,7 @@ import {FocusTrapFactory, FocusTrap} from '../core/a11y/focus-trap';
  * @docs-private
  */
 export function throwMdDialogContentAlreadyAttachedError() {
-  throw new Error('Attempting to attach dialog content after content is already attached');
+  throw Error('Attempting to attach dialog content after content is already attached');
 }
 
 /**
@@ -65,6 +65,7 @@ export function throwMdDialogContentAlreadyAttachedError() {
   host: {
     'class': 'mat-dialog-container',
     '[attr.role]': '_config?.role',
+    '[attr.aria-labelledby]': '_ariaLabelledBy',
     '[@slideDialog]': '_state',
     '(@slideDialog.done)': '_onAnimationDone($event)',
   },
@@ -90,6 +91,9 @@ export class MdDialogContainer extends BasePortalHost {
 
   /** Emits the current animation state whenever it changes. */
   _onAnimationStateChange = new EventEmitter<AnimationEvent>();
+
+  /** ID of the element that should be considered as the dialog's label. */
+  _ariaLabelledBy: string | null = null;
 
   constructor(
     private _ngZone: NgZone,

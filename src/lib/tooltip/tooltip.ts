@@ -17,6 +17,7 @@ import {
   OnDestroy,
   Renderer2,
   ChangeDetectorRef,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   style,
@@ -36,7 +37,7 @@ import {
 } from '../core';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {Dir} from '../core/rtl/dir';
+import {Directionality} from '../core/bidi/index';
 import {Platform} from '../core/platform/index';
 import 'rxjs/add/operator/first';
 import {ScrollDispatcher} from '../core/overlay/scroll/scroll-dispatcher';
@@ -52,7 +53,7 @@ export const SCROLL_THROTTLE_MS = 20;
 
 /** Throws an error if the user supplied an invalid tooltip position. */
 export function throwMdTooltipInvalidPositionError(position: string) {
-  throw new Error(`Tooltip position "${position}" is invalid.`);
+  throw Error(`Tooltip position "${position}" is invalid.`);
 }
 
 /**
@@ -75,6 +76,7 @@ export class MdTooltip implements OnDestroy {
 
   private _position: TooltipPosition = 'below';
   private _disabled: boolean = false;
+  private _tooltipClass: string|string[]|Set<string>|{[key: string]: any};
 
   /** Allows the user to define the position of the tooltip relative to the parent element */
   @Input('mdTooltipPosition')
@@ -125,6 +127,16 @@ export class MdTooltip implements OnDestroy {
     }
   }
 
+  /** Classes to be passed to the tooltip. Supports the same syntax as `ngClass`. */
+  @Input('mdTooltipClass')
+  get tooltipClass() { return this._tooltipClass; }
+  set tooltipClass(value: string|string[]|Set<string>|{[key: string]: any}) {
+    this._tooltipClass = value;
+    if (this._tooltipInstance) {
+      this._setTooltipClass(this._tooltipClass);
+    }
+  }
+
   /** @deprecated */
   @Input('md-tooltip')
   get _deprecatedMessage(): string { return this.message; }
@@ -155,6 +167,11 @@ export class MdTooltip implements OnDestroy {
   get _matShowDelay() { return this.showDelay; }
   set _matShowDelay(v) { this.showDelay = v; }
 
+  // Properties with `mat-` prefix for nonconflict mode.
+  @Input('matTooltipClass')
+  get _matClass() { return this.tooltipClass; }
+  set _matClass(v) { this.tooltipClass = v; }
+
   constructor(
     private _overlay: Overlay,
     private _elementRef: ElementRef,
@@ -163,7 +180,7 @@ export class MdTooltip implements OnDestroy {
     private _ngZone: NgZone,
     private _renderer: Renderer2,
     private _platform: Platform,
-    @Optional() private _dir: Dir) {
+    @Optional() private _dir: Directionality) {
 
     // The mouse events shouldn't be bound on iOS devices, because
     // they can prevent the first tap from firing its click event.
@@ -190,6 +207,7 @@ export class MdTooltip implements OnDestroy {
       this._createTooltip();
     }
 
+    this._setTooltipClass(this._tooltipClass);
     this._setTooltipMessage(this._message);
     this._tooltipInstance.show(this._position, delay);
   }
@@ -322,6 +340,12 @@ export class MdTooltip implements OnDestroy {
       }
     });
   }
+
+  /** Updates the tooltip class */
+  private _setTooltipClass(tooltipClass: string|string[]|Set<string>|{[key: string]: any}) {
+    this._tooltipInstance.tooltipClass = tooltipClass;
+    this._tooltipInstance._markForCheck();
+  }
 }
 
 export type TooltipVisibility = 'initial' | 'visible' | 'hidden';
@@ -334,6 +358,7 @@ export type TooltipVisibility = 'initial' | 'visible' | 'hidden';
   selector: 'md-tooltip-component, mat-tooltip-component',
   templateUrl: './tooltip.html',
   styleUrls: ['./tooltip.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('state', [
       state('void', style({transform: 'scale(0)'})),
@@ -355,6 +380,9 @@ export class TooltipComponent {
   /** Message to display in the tooltip */
   message: string;
 
+  /** Classes to be added to the tooltip. Supports the same syntax as `ngClass`. */
+  tooltipClass: string|string[]|Set<string>|{[key: string]: any};
+
   /** The timeout ID of any current timer set to show the tooltip */
   _showTimeoutId: number;
 
@@ -373,7 +401,8 @@ export class TooltipComponent {
   /** Subject for notifying that the tooltip has been hidden from the view */
   private _onHide: Subject<any> = new Subject();
 
-  constructor(@Optional() private _dir: Dir, private _changeDetectorRef: ChangeDetectorRef) {}
+  constructor(@Optional() private _dir: Directionality,
+              private _changeDetectorRef: ChangeDetectorRef) {}
 
   /**
    * Shows the tooltip with an animation originating from the provided origin

@@ -16,11 +16,9 @@ import {AnimationEvent} from '@angular/animations';
 import {By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TooltipPosition, MdTooltip, MdTooltipModule, SCROLL_THROTTLE_MS} from './index';
-import {OverlayContainer} from '../core';
-import {Dir, LayoutDirection} from '../core/rtl/dir';
-import {OverlayModule} from '../core/overlay/overlay-directives';
+import {Directionality, Direction} from '../core/bidi/index';
+import {OverlayModule, Scrollable, OverlayContainer} from '../core/overlay/index';
 import {Platform} from '../core/platform/platform';
-import {Scrollable} from '../core/overlay/scroll/scrollable';
 import {dispatchFakeEvent} from '../core/testing/dispatch-events';
 
 
@@ -28,7 +26,7 @@ const initialTooltipMessage = 'initial tooltip message';
 
 describe('MdTooltip', () => {
   let overlayContainerElement: HTMLElement;
-  let dir: {value: LayoutDirection};
+  let dir: {value: Direction};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -41,7 +39,7 @@ describe('MdTooltip', () => {
           document.body.appendChild(overlayContainerElement);
           return {getContainerElement: () => overlayContainerElement};
         }},
-        {provide: Dir, useFactory: () => {
+        {provide: Directionality, useFactory: () => {
           return dir = { value: 'ltr' };
         }}
       ]
@@ -238,6 +236,32 @@ describe('MdTooltip', () => {
 
       fixture.detectChanges();
       expect(overlayContainerElement.textContent).toContain(newMessage);
+    }));
+
+    it('should allow extra classes to be set on the tooltip', fakeAsync(() => {
+      expect(tooltipDirective._tooltipInstance).toBeUndefined();
+
+      tooltipDirective.show();
+      tick(0); // Tick for the show delay (default is 0)
+      fixture.detectChanges();
+
+      // Make sure classes aren't prematurely added
+      let tooltipElement = overlayContainerElement.querySelector('.mat-tooltip') as HTMLElement;
+      expect(tooltipElement.classList).not.toContain('custom-one',
+        'Expected to not have the class before enabling mdTooltipClass');
+      expect(tooltipElement.classList).not.toContain('custom-two',
+        'Expected to not have the class before enabling mdTooltipClass');
+
+      // Enable the classes via ngClass syntax
+      fixture.componentInstance.showTooltipClass = true;
+      fixture.detectChanges();
+
+      // Make sure classes are correctly added
+      tooltipElement = overlayContainerElement.querySelector('.mat-tooltip') as HTMLElement;
+      expect(tooltipElement.classList).toContain('custom-one',
+        'Expected to have the class after enabling mdTooltipClass');
+      expect(tooltipElement.classList).toContain('custom-two',
+        'Expected to have the class after enabling mdTooltipClass');
     }));
 
     it('should be removed after parent destroyed', fakeAsync(() => {
@@ -468,7 +492,8 @@ describe('MdTooltip', () => {
   template: `
     <button *ngIf="showButton"
             [mdTooltip]="message"
-            [mdTooltipPosition]="position">
+            [mdTooltipPosition]="position"
+            [mdTooltipClass]="{'custom-one': showTooltipClass, 'custom-two': showTooltipClass }">
       Button
     </button>`
 })
@@ -476,6 +501,7 @@ class BasicTooltipDemo {
   position: string = 'below';
   message: string = initialTooltipMessage;
   showButton: boolean = true;
+  showTooltipClass = false;
   @ViewChild(MdTooltip) tooltip: MdTooltip;
 }
 
